@@ -31,17 +31,17 @@ class WelcomeController < ApplicationController
 
     def get_user_id
       username = params[:username]
-      response = `curl -v 'http://api.soundcloud.com/resolve.json?url=http://soundcloud.com/#{username}&client_id=#{ENV["CLIENT_ID"]}'`
-      parse_response(response)
+      r = `curl -v 'http://api.soundcloud.com/resolve.json?url=http://soundcloud.com/#{username}&client_id=#{ENV["CLIENT_ID"]}'`
+      parse_r(r)
     end
 
-    def parse_response(response)
-      response.match(/(\d+).json/).captures[0]
+    def parse_r(r)
+      r.match(/(\d+).json/).captures[0]
     end
 
     def get_likes(user_id, limit=1000, offset=0)
-      response = `curl https://api-v2.soundcloud.com/users/#{user_id}/likes?limit=#{limit}&offset=#{offset}`
-      JSON.parse(response).first[1]
+      r = `curl https://api-v2.soundcloud.com/users/#{user_id}/likes?limit=#{limit}&offset=#{offset}`
+      JSON.parse(r).first[1]
     end
 
     def build_liked_artists(likes)
@@ -62,14 +62,23 @@ class WelcomeController < ApplicationController
 
     def get_recommended_events(artist, rad=50, loc="use_geoip")
       loc = URI::encode(loc)
-      response = `curl "http://api.bandsintown.com/artists/#{artist}/events/recommended?location=#{loc}&radius=#{rad}&app_id=YOUR_APP_ID&api_version=2.0&format=json"`
-      JSON.parse(response)
+      url = "http://api.bandsintown.com/artists/#{artist}/events/recommended?location=#{loc}&radius=#{rad}&app_id=YOUR_APP_ID&api_version=2.0&format=json"
+      puts "****"
+      puts "****"
+      puts "****"
+      puts url
+      r = `curl "#{url}"`
+      puts r
+      puts "****"
+      puts "****"
+      puts "****"
+      JSON.parse(r)
     end
 
     def get_artist_events(artist, rad=50, loc="use_geoip")
       loc = URI::encode(loc)
-      response = `curl "http://api.bandsintown.com/artists/#{artist}/events/search.json?api_version=2.0&app_id=YOUR_APP_ID&location=#{loc}&radius=#{rad}"`
-      JSON.parse(response)
+      r = `curl "http://api.bandsintown.com/artists/#{artist}/events/search.json?api_version=2.0&app_id=YOUR_APP_ID&location=#{loc}&radius=#{rad}"`
+      JSON.parse(r)
     end
 
 end
