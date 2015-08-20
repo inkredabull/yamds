@@ -2,8 +2,10 @@
   <div class="jumbotron row">
     <div class="col-lg-12">
       <h1>Does this seem right?</h1>
-      <p>list</p>
       <p><a class="btn btn-lg btn-success" href="#" role="button">Find shows nearby</a></p>
+      <% @liked_artists.each do |a| %>
+        <p><%= a[0] %></p>
+      <% end %>
     </div>
   </div>
 
