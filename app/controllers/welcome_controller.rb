@@ -2,20 +2,18 @@ require 'soundcloud'
 require 'json'
 require 'csv'
 
-HEADERS = ["title", "user", "track_url"]
-OUTPUT_CSV = "tracks.csv"
-
 class WelcomeController < ApplicationController
 
   def soundcloud
-    user_id = get_user_id(ENV["USERNAME"])
+    user_id = get_user_id
     likes = get_likes(user_id)
     @liked_artists = build_liked_artists(likes) || []
   end
 
   private
 
-    def get_user_id(username)
+    def get_user_id
+      username = params[:username]
       response = `curl -v 'http://api.soundcloud.com/resolve.json?url=http://soundcloud.com/#{username}&client_id=#{ENV["CLIENT_ID"]}'`
       parse_response(response)
     end

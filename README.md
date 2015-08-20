@@ -3,4 +3,4 @@ Yet Another Music Discovery Service
 
 ## USAGE
 
-`USERNAME=... CLIENT_ID=... bundle exec rails s`
+`CLIENT_ID=<CLIENT_ID> bundle exec rails s`

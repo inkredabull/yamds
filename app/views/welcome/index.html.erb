@@ -2,8 +2,13 @@
   <div class="jumbotron row">
     <div class="col-lg-12">
       <h1>What's Your Soundcloud Username?</h1>
-      <p><input type="text" class="form-control"></p>
-      <p><a class="btn btn-lg btn-success" href="/soundcloud" role="button">Get faves</a></p>
+      <p>
+        <%= form_tag("/soundcloud", method: "post") do %>
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
+          <p><input type="text" name="username" class="form-control"></p>
+          <button class="btn btn-lg btn-success" role="button">Get faves</button>
+        <% end %>
+      </p>
     </div>
   </div>
 
