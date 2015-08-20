@@ -3,7 +3,6 @@ require 'json'
 require 'csv'
 require 'open-uri'
 
-
 ARTIST_NAME_COLUMN = "artist_name"
 INPUT_CSV = ""
 
