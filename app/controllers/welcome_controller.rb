@@ -25,6 +25,17 @@ class WelcomeController < ApplicationController
     source_artists.each do |a|
       @shows[a] = get_recommended_events(a)
     end
+
+    base_url = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/TRACK_ID&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false" 
+
+    @api_urls = []
+    @track_urls = [
+      "https://soundcloud.com/ruffneck-ting/genetix-habitat-adrenaline-1"
+    ]
+    @track_urls.each do |url|
+      track_id = get_track_id(url)
+      @api_urls.push(base_url.gsub(/TRACK_ID/, track_id))
+    end
   end
 
   def artists
@@ -35,13 +46,19 @@ class WelcomeController < ApplicationController
 
     # soundcloud
 
+    def get_track_id(url)
+      r = `curl -v 'http://api.soundcloud.com/resolve.json?url=#{CGI.escape url}&client_id=#{ENV["CLIENT_ID"]}'`
+      r.match(/tracks\/(\d+).json/).captures[0]
+    end
+
     def get_user_id
       username = params[:username]
       r = `curl -v 'http://api.soundcloud.com/resolve.json?url=http://soundcloud.com/#{username}&client_id=#{ENV["CLIENT_ID"]}'`
-      parse_r(r)
+      #parse_response(r)
+      r.match(/(\d+).json/).captures[0]
     end
 
-    def parse_r(r)
+    def parse_response(r)
       r.match(/(\d+).json/).captures[0]
     end
 
@@ -85,10 +102,11 @@ class WelcomeController < ApplicationController
     end
 
     def source_artists
-      job_id = 768382
+      job_id = 768382 #768695
       cf_token = ENV['CF_TOKEN']
-      url = "https://api.crowdflower.com/v2/jobs/#{job_id}/judgments"
-      r = `curl -u "#{cf_token}:" #{url}`
-      JSON.parse(r).collect { |a| a['data']['artist_name'] }.flatten.uniq.reject { |c| c.empty? }.sample(7).sort
+      #url = "https://api.crowdflower.com/v2/jobs/#{job_id}/judgments"
+      #r = `curl -u "#{cf_token}:" #{url}`
+      #JSON.parse(r).collect { |a| a['data']['artist_name'] }.flatten.uniq.reject { |c| c.empty? }.sample(7).sort
+      ['Genetix']
     end
 end
