@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get 'soundcloud' => 'welcome#soundcloud'
   get 'shows' => 'welcome#shows'
 
+  get 'artists' => 'welcome#artists'
+
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 

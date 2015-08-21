@@ -25,6 +25,15 @@ class WelcomeController < ApplicationController
     @shows = get_recommended_events(artist)
   end
 
+  def artists
+    job_id = 768382
+    cf_token = ENV['CF_TOKEN']
+    url = "https://api.crowdflower.com/v2/jobs/#{job_id}/judgments"
+    r = `curl -u "#{cf_token}:" #{url}`
+    @artists = JSON.parse(r).collect { |a| a['data']['artist_name'] }.flatten.uniq.sort.reject { |c| c.empty? }
+    render :json => @artists
+  end
+
   private
 
     # soundcloud
