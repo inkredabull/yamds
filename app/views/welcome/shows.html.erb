@@ -2,25 +2,25 @@
   <div class="jumbotron row">
     <div class="col-lg-12">
       <hr>
-      <h1>Shows</h1>
+      <h1>Artists</h1>
       <hr>
-      <% @shows.each do |artist, events| %>
-        <% if events.count > 0 %>
-          <h3><%= artist %></h3>
+      <% @shows.each do |s| %>
+          <h3><%= s[:artist] %></h3>
           <h4>Tracks</h4>
 
-          <% @api_urls.each do |url| %>
-            <iframe width="100%" height="166" scrolling="no" frameborder="no" src="<%= url %>"></iframe>
+          <% s[:tracks].each do |t| %>
+            <iframe width="100%" height="166" scrolling="no" frameborder="no" src="<%= t %>"></iframe>
           <% end %>
 
-          <h4>You Might Also Like...</h4>
-          <% events.each do |e| %>
-            <p><%= e['title'] rescue '' %></p>
-            <p><%= link_to 'Buy tix', e['ticket_url'], target: '_blank' rescue '' %></p>
+          <% if s[:events].length > 0 %>
+            <h4>You Might Also Like...</h4>
+            <% s[:events].each do |e| %>
+              <p><%= e['title'] rescue '' %></p>
+              <p><%= link_to 'Buy tix', e['ticket_url'], target: '_blank' rescue '' %></p>
+            <% end %>
           <% end %>
           <hr>
         <% end %>
-      <% end %>
     </div>
   </div>
 
