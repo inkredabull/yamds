@@ -61,22 +61,16 @@ class WelcomeController < ApplicationController
     # bandsintown
 
     def get_recommended_events(artist, rad=50, loc="use_geoip")
-      loc = URI::encode(loc)
+      loc = "San%20Francisco,CA" # otherwise is set to Seattle, WA (AWS)
+      #loc = URI::encode(loc)
       url = "http://api.bandsintown.com/artists/#{artist}/events/recommended?location=#{loc}&radius=#{rad}&app_id=YOUR_APP_ID&api_version=2.0&format=json"
-      puts "****"
-      puts "****"
-      puts "****"
-      puts url
       r = `curl "#{url}"`
-      puts r
-      puts "****"
-      puts "****"
-      puts "****"
       JSON.parse(r)
     end
 
     def get_artist_events(artist, rad=50, loc="use_geoip")
-      loc = URI::encode(loc)
+      loc = "San%20Francisco,CA" # otherwise is set to Seattle, WA (AWS)
+      #loc = URI::encode(loc)
       r = `curl "http://api.bandsintown.com/artists/#{artist}/events/search.json?api_version=2.0&app_id=YOUR_APP_ID&location=#{loc}&radius=#{rad}"`
       JSON.parse(r)
     end
