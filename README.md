@@ -4,6 +4,7 @@ Yet Another Music Discovery Service
 ## TECHS
 
 - Bootstrap 4-alpha
+- Bootflat
 - Rails 4.2
 - Heroku
 - Soundcloud API
