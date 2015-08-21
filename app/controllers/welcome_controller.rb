@@ -45,6 +45,7 @@ class WelcomeController < ApplicationController
         })
       end
     end
+    #@shows.sort_by { |a,b| a[:events].count <=> b[:events].count }
   end
 
   def artists
