@@ -23,29 +23,18 @@ class WelcomeController < ApplicationController
     #@shows = get_artist_events(artist)
     @shows = []
 
-    base_url = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/TRACK_ID&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false" 
-
     judgments.each do |j|
-      a = get_artist(j)
-      tracks = get_tracks(j)
-
-      api_urls = []
-      tracks.each do |url|
-        track_id = get_track_id(url)
-        api_urls.push(base_url.gsub(/TRACK_ID/, track_id))
-      end
-
-      events = a ? get_recommended_events(a) : []
+      a = get_artist(j).first
 
       if a
         @shows.push({
           artist: a,
-          tracks: api_urls,
-          events: events
+          #tracks: get_uris(j),
+          tracks: [],
+          events: get_recommended_events(a)
         })
       end
     end
-    #@shows.sort_by { |a,b| a[:events].count <=> b[:events].count }
   end
 
   def artists
@@ -55,6 +44,17 @@ class WelcomeController < ApplicationController
   private
 
     # soundcloud
+
+    def get_uris(j)
+      base_url = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/TRACK_ID&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false" 
+      tracks = get_tracks(j)
+      api_urls = []
+      tracks.each do |url|
+        track_id = get_track_id(url)
+        api_urls.push(base_url.gsub(/TRACK_ID/, track_id))
+      end
+      api_urls
+    end
 
     def get_track_id(url)
       r = `curl -v 'http://api.soundcloud.com/resolve.json?url=#{CGI.escape url}&client_id=#{ENV["CLIENT_ID"]}'`
@@ -93,13 +93,13 @@ class WelcomeController < ApplicationController
     # bandsintown
 
     def get_recommended_events(artist, rad=50, loc="use_geoip")
-      artist = URI::encode(artist)
+      return [] unless artist
+      #artist = URI::encode(artist)
       loc = "San%20Francisco,CA" # otherwise is set to Seattle, WA (AWS)
       #loc = URI::encode(loc)
-      url = "http://api.bandsintown.com/artists/#{URI.escape artist}/events/recommended?location=#{loc}&radius=#{rad}&app_id=YOUR_APP_ID&api_version=2.0&format=json"
-      puts url
+      url = "http://api.bandsintown.com/artists/#{URI.encode artist}/events/recommended?location=#{loc}&radius=#{rad}&app_id=YOUR_APP_ID&api_version=2.0&format=json"
       r = `curl "#{url}"`
-      JSON.parse(r)
+      JSON.parse(r) rescue []
     end
 
     def get_artist_events(artist, rad=50, loc="use_geoip")
@@ -123,13 +123,12 @@ class WelcomeController < ApplicationController
     end
 
     def judgments
-      #job_id = 768382 # original
-      job_id = 768695 # new
-      job_id = 768711 # my test
+      job_id = 768382 # original
+      #job_id = 768695 # new
+      #job_id = 768711 # my test
       cf_token = ENV['CF_TOKEN']
       url = "https://api.crowdflower.com/v2/jobs/#{job_id}/judgments"
       r = `curl -u "#{cf_token}:" #{url}`
-      #JSON.parse(r).collect { |a| a['data']['artist_name'] }.flatten.uniq.reject { |c| c.empty? }.sample(7).sort
-      JSON.parse(r).collect { |a| a['data'] }
+      JSON.parse(r).collect { |a| a['data'] }.sample(5)
     end
 end

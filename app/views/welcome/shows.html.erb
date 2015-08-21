@@ -1,15 +1,15 @@
 <div class="container text-center">
   <div class="jumbotron row">
     <div class="col-lg-12">
-      <hr>
       <h1>Artists</h1>
       <hr>
-      <% @shows.each do |s| %>
+      <% @shows.sort { |a,b| b[:events].count <=> a[:events].count }.each do |s| %>
           <h3><%= s[:artist] %></h3>
-          <h4>Tracks</h4>
-
-          <% s[:tracks].each do |t| %>
-            <iframe width="100%" height="166" scrolling="no" frameborder="no" src="<%= t %>"></iframe>
+          <% if s[:tracks].length > 0 %>
+            <h4>Tracks</h4>
+            <% s[:tracks].each do |t| %>
+              <iframe width="100%" height="166" scrolling="no" frameborder="no" src="<%= t %>"></iframe>
+            <% end %>
           <% end %>
 
           <% if s[:events].length > 0 %>
