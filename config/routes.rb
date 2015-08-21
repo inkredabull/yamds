@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'soundcloud' => 'welcome#soundcloud'
   post 'create_job' => 'welcome#create_job'
   #get 'create_job' => 'welcome#create_job'
+  get 'json' => 'welcome#json'
 
   get 'shows' => 'welcome#shows'
 

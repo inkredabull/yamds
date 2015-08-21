@@ -27,6 +27,7 @@ class WelcomeController < ApplicationController
     cf_token = ENV['CF_TOKEN']
     url = "https://api.crowdflower.com/v2/jobs/#{JOB_ID}/copy?all_units=false"
     r = `curl -X POST -u "#{cf_token}:" #{url}`
+    #render json: JSON.parse(r)
 
     file = "/tmp/#{user_id}.csv"
     CSV.open(file, "w") do |csv|
@@ -43,21 +44,14 @@ class WelcomeController < ApplicationController
   end
 
   def shows
-    #all_artist_events = []
-    #all_recommended_events = []
-
-    #artist = row[ARTIST_NAME_COLUMN]
-    #@shows = get_artist_events(artist)
     @shows = []
-
     judgments.each do |j|
-      a = get_artist(j).first
-
+      a = get_artist(j)
       if a
         @shows.push({
           artist: a,
-          #tracks: get_uris(j),
-          tracks: [],
+          tracks: get_uris(j),
+          #tracks: [],
           events: get_recommended_events(a)
         })
       end
@@ -66,6 +60,10 @@ class WelcomeController < ApplicationController
 
   def artists
     render json: source_artists
+  end
+
+  def json
+    render json: judgments
   end
 
   private
@@ -138,11 +136,11 @@ class WelcomeController < ApplicationController
     end
 
     def get_artist(j)
-      j['artist_name']
+      j['artist_name']['result']
     end
 
     def get_tracks(j)
-      [ j['track_1'], j['track_2'], j['track_3'] ].compact
+      [ j['track_1']['result'], j['track_2']['result'], j['track_3']['result'] ].compact
     end
 
     def source_artists
@@ -150,11 +148,11 @@ class WelcomeController < ApplicationController
     end
 
     def judgments
-      job_id = 768382 # original
+      #job_id = 768382 # original
       #job_id = 768711 # my test
       cf_token = ENV['CF_TOKEN']
-      url = "https://api.crowdflower.com/v2/jobs/#{job_id}/judgments"
+      url = "https://api.crowdflower.com/v2/jobs/#{JOB_ID}/judgments"
       r = `curl -u "#{cf_token}:" #{url}`
-      JSON.parse(r).collect { |a| a['data'] }.sample(5)
+      JSON.parse(r).collect { |a| a['unit']['aggregate_result'] }.sample(5)
     end
 end
