@@ -20,18 +20,15 @@ class WelcomeController < ApplicationController
     #all_recommended_events = []
 
     #artist = row[ARTIST_NAME_COLUMN]
-    artist = "Skrillex"
     #@shows = get_artist_events(artist)
-    @shows = get_recommended_events(artist)
+    @shows = {}
+    source_artists.each do |a|
+      @shows[a] = get_recommended_events(a)
+    end
   end
 
   def artists
-    job_id = 768382
-    cf_token = ENV['CF_TOKEN']
-    url = "https://api.crowdflower.com/v2/jobs/#{job_id}/judgments"
-    r = `curl -u "#{cf_token}:" #{url}`
-    @artists = JSON.parse(r).collect { |a| a['data']['artist_name'] }.flatten.uniq.sort.reject { |c| c.empty? }
-    render :json => @artists
+    render json: source_artists
   end
 
   private
@@ -73,7 +70,8 @@ class WelcomeController < ApplicationController
       artist = URI::encode(artist)
       loc = "San%20Francisco,CA" # otherwise is set to Seattle, WA (AWS)
       #loc = URI::encode(loc)
-      url = "http://api.bandsintown.com/artists/#{artist}/events/recommended?location=#{loc}&radius=#{rad}&app_id=YOUR_APP_ID&api_version=2.0&format=json"
+      url = "http://api.bandsintown.com/artists/#{URI.escape artist}/events/recommended?location=#{loc}&radius=#{rad}&app_id=YOUR_APP_ID&api_version=2.0&format=json"
+      puts url
       r = `curl "#{url}"`
       JSON.parse(r)
     end
@@ -82,8 +80,15 @@ class WelcomeController < ApplicationController
       artist = URI::encode(artist)
       loc = "San%20Francisco,CA" # otherwise is set to Seattle, WA (AWS)
       #loc = URI::encode(loc)
-      r = `curl "http://api.bandsintown.com/artists/#{artist}/events/search.json?api_version=2.0&app_id=YOUR_APP_ID&location=#{loc}&radius=#{rad}"`
+      r = `curl "http://api.bandsintown.com/artists/#{URI.escaped artist}/events/search.json?api_version=2.0&app_id=YOUR_APP_ID&location=#{loc}&radius=#{rad}"`
       JSON.parse(r)
     end
 
+    def source_artists
+      job_id = 768382
+      cf_token = ENV['CF_TOKEN']
+      url = "https://api.crowdflower.com/v2/jobs/#{job_id}/judgments"
+      r = `curl -u "#{cf_token}:" #{url}`
+      JSON.parse(r).collect { |a| a['data']['artist_name'] }.flatten.uniq.reject { |c| c.empty? }.sample(7).sort
+    end
 end

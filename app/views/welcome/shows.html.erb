@@ -4,9 +4,15 @@
       <hr>
       <h1>Shows</h1>
       <hr>
-      <% @shows.each do |a| %>
-        <p><%= a['title'] %></p>
-        <p><%= link_to 'Buy tix', a['ticket_url'] %></p>
+      <% @shows.each do |artist, events| %>
+        <% if events.count > 0 %>
+          <h3><%= artist %></h3>
+          <% events.each do |e| %>
+            <p><%= e['title'] rescue '' %></p>
+            <p><%= link_to 'Buy tix', e['ticket_url'], target: '_blank' rescue '' %></p>
+          <% end %>
+          <hr>
+        <% end %>
       <% end %>
     </div>
   </div>
