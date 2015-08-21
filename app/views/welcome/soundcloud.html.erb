@@ -9,7 +9,9 @@
       <p>...</p>
       <hr>
       <p>
-        <a class="btn btn-lg btn-success" href="/shows" role="button">Get more music</a>
+        <%= form_tag("/create_job", method: "post") do %>
+          <button class="btn btn-lg btn-primary">Get more music</button>
+        <% end %>
       </p>
     </div>
   </div>

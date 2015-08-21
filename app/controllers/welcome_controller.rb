@@ -15,6 +15,10 @@ class WelcomeController < ApplicationController
     #@liked_artists = []
   end
 
+  def create_job
+    redirect_to :shows
+  end
+
   def shows
     #all_artist_events = []
     #all_recommended_events = []

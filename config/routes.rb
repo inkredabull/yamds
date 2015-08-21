@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   # Example of regular route:
   post 'soundcloud' => 'welcome#soundcloud'
   get 'soundcloud' => 'welcome#soundcloud'
+  post 'create_job' => 'welcome#create_job'
+
   get 'shows' => 'welcome#shows'
 
   get 'artists' => 'welcome#artists'

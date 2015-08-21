@@ -6,7 +6,7 @@
         <%= form_tag("/soundcloud", method: "post") do %>
           <%= hidden_field_tag :authenticity_token, form_authenticity_token -%>
           <p><input type="text" name="username" class="form-control"></p>
-          <button class="btn btn-lg btn-success" role="button">Get faves</button>
+          <button class="btn btn-lg btn-primary" role="button">Get faves</button>
         <% end %>
       </p>
     </div>
