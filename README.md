@@ -5,7 +5,10 @@ Yet Another Music Discovery Service
 
 - Bootstrap 4-alpha
 - Rails 4.2
-
+- Heroku
+- Soundcloud API
+- bandsintown API
+- Crowdflower API
 
 ## USAGE
 
