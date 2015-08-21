@@ -30,7 +30,9 @@ class WelcomeController < ApplicationController
 
     @api_urls = []
     @track_urls = [
-      "https://soundcloud.com/ruffneck-ting/genetix-habitat-adrenaline-1"
+      "https://soundcloud.com/ruffneck-ting/genetix-habitat-adrenaline-1",
+      "https://soundcloud.com/drumandbass/genetix-oslo-shotgun-premiere",
+      "https://soundcloud.com/multi-function/genetix-humanity-released-20th-may"
     ]
     @track_urls.each do |url|
       track_id = get_track_id(url)
