@@ -6,16 +6,39 @@ require 'open-uri'
 ARTIST_NAME_COLUMN = "artist_name"
 INPUT_CSV = ""
 
+JOB_ID = 768695 # new: artists + tracks
+
 class WelcomeController < ApplicationController
 
   def soundcloud
     user_id = get_user_id
+    session[:user_id] = user_id
     likes = get_likes(user_id)
     @liked_artists = build_liked_artists(likes) || []
     #@liked_artists = []
   end
 
   def create_job
+
+    user_id = session[:user_id]
+    likes = get_likes(user_id)
+    @liked_artists = build_liked_artists(likes) || []
+
+    cf_token = ENV['CF_TOKEN']
+    url = "https://api.crowdflower.com/v2/jobs/#{JOB_ID}/copy?all_units=false"
+    r = `curl -X POST -u "#{cf_token}:" #{url}`
+
+    file = "/tmp/#{user_id}.csv"
+    CSV.open(file, "w") do |csv|
+      csv << ['title','user','track_url']
+      @liked_artists.each do |a|
+        csv << a
+      end
+    end
+
+    url = "https://api.crowdflower.com/v2/jobs/769029/upload"
+    r = `curl -T #{file} -H "Content-Type: text/csv" -u "#{cf_token}:" #{url}`
+    #render json: JSON.parse(r)
     redirect_to :shows
   end
 
@@ -128,7 +151,6 @@ class WelcomeController < ApplicationController
 
     def judgments
       job_id = 768382 # original
-      #job_id = 768695 # new
       #job_id = 768711 # my test
       cf_token = ENV['CF_TOKEN']
       url = "https://api.crowdflower.com/v2/jobs/#{job_id}/judgments"
