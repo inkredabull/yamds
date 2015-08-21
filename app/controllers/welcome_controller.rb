@@ -9,10 +9,10 @@ INPUT_CSV = ""
 class WelcomeController < ApplicationController
 
   def soundcloud
-    #user_id = get_user_id
-    #likes = get_likes(user_id)
-    #@liked_artists = build_liked_artists(likes) || []
-    @liked_artists = []
+    user_id = get_user_id
+    likes = get_likes(user_id)
+    @liked_artists = build_liked_artists(likes) || []
+    #@liked_artists = []
   end
 
   def shows

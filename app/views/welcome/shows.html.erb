@@ -16,7 +16,7 @@
             <h4>You Might Also Like...</h4>
             <% s[:events].each do |e| %>
               <p><%= e['title'] rescue '' %></p>
-              <p><%= link_to 'Buy tix', e['ticket_url'], target: '_blank' rescue '' %></p>
+              <p><%= link_to 'Buy tix', e['ticket_url'], target: '_blank', class: 'btn btn-primary' rescue '' %></p>
             <% end %>
           <% end %>
           <hr>
