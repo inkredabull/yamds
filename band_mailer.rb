@@ -2,7 +2,8 @@ require 'mail'
 
 HEADERS = ["Band", "Date", "Purchase Tickets Here!"]
 INTERVAL = "168 hours"
-RECIPIENTS = ["adrian.zarifis@crowdflower.com","wil@crowdflower.com","kirsten.gokay@crowdflower.com","christina.chiu@crowdflower.com"]
+#RECIPIENTS = ["adrian.zarifis@crowdflower.com","wil@crowdflower.com","kirsten.gokay@crowdflower.com","christina.chiu@crowdflower.com"]
+RECIPIENTS = ["wil@crowdflower.com"]
 
 #configure options for mail gem
 mail_options = {
@@ -19,12 +20,15 @@ Mail.defaults do
 	delivery_method :smtp, mail_options
 end
 
-def send_email(body)
+def send_email(message)
 	Mail.deliver do
 		from 'ribbymailer@gmail.com'
 		to RECIPIENTS
 		subject "Your Favorite Bands Are Here!" 
 		content_type 'text/html; charset=UTF-8'
-		body File.read('body.txt')
+		#body File.read('body.txt')
+		body message
 	end
 end
+
+send_email('hey')
