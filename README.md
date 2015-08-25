@@ -13,4 +13,4 @@ Yet Another Music Discovery Service
 
 ## USAGE
 
-`CLIENT_ID=<CLIENT_ID> bundle exec rails s`
+`CF_TOKEN=<CF_TOKEN> CLIENT_ID=<CLIENT_ID> bundle exec rails s`
