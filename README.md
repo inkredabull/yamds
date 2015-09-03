@@ -17,4 +17,6 @@ Yet Another Music Discovery Service
 
 ## BACKGROUND
 
-This started as a two-day project for an inhouse Hackathon held at CrowdFlower Aug 20th/21st, 2015.
+This started as a two-day project for an inhouse Hackathon held at [CrowdFlower](http://www.crowdflower.com/) Aug 20th/21st, 2015.
+
+![hackathon_final](https://raw.githubusercontent.com/inkredabull/yamds/master/app/assets/images/hackathon_final.png)
